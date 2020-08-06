@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PizzaPlanetConsole.App.Classes;
+using PizzaPlanetConsole2.DataAccess.DataModels;
+using System;
 
 namespace PizzaPlanetConsole.App
 {
@@ -6,7 +8,15 @@ namespace PizzaPlanetConsole.App
     {
         static void Main()
         {
-            Console.WriteLine("Welcome to the Pizza Planet Console Application");
+            var user = Start();
+        }
+
+        public static Users Start()
+        {
+            Console.WriteLine("Welcome to the Pizza Planet Console Application!");
+            Console.Write("Have you been here before(y/n):");
+
+            return AccountClass.IncorrectInfo();
         }
     }
 }
