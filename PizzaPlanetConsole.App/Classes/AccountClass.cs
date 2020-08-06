@@ -97,7 +97,6 @@ namespace PizzaPlanetConsole.App.Classes
         public static Users Login()
         {
             Console.WriteLine();
-            Console.WriteLine("Welcome back!");
             Console.Write("Enter Email address: ");
             string userEmail = Console.ReadLine();
             Console.WriteLine();

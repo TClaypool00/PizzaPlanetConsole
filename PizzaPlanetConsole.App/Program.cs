@@ -9,6 +9,9 @@ namespace PizzaPlanetConsole.App
         static void Main()
         {
             var user = Start();
+            var store = StoreClass.PickAStore(user);
+
+            Console.WriteLine($"Weclome to the store on  {store.City}");
         }
 
         public static Users Start()
