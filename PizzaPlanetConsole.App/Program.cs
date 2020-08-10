@@ -9,9 +9,7 @@ namespace PizzaPlanetConsole.App
         static void Main()
         {
             var user = Start();
-            var store = StoreClass.PickAStore(user);
-
-            Console.WriteLine($"Weclome to the store on  {store.City}");
+            Navigation.MainMenu(user);
         }
 
         public static Users Start()
@@ -19,7 +17,7 @@ namespace PizzaPlanetConsole.App
             Console.WriteLine("Welcome to the Pizza Planet Console Application!");
             Console.Write("Have you been here before(y/n):");
 
-            return AccountClass.IncorrectInfo();
+            return AccountClass.RegisterOrLogin();
         }
     }
 }

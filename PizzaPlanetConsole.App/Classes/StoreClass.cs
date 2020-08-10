@@ -20,19 +20,12 @@ namespace PizzaPlanetConsole.App.Classes
                 Console.WriteLine($"{item.StoreId}. {item.Street} {item.City} {item.State}, {item.ZipCode}");
             }
 
-            try
-            {
-                Console.Write("Pick a store: ");
-                int userInput = int.Parse(Console.ReadLine());
-                var store = ctx.Stores.FirstOrDefault(s => s.StoreId == userInput);
+            Console.Write("Pick a store: ");
+            int userInput = int.Parse(Console.ReadLine());
+            var store = ctx.Stores.FirstOrDefault(s => s.StoreId == userInput);
 
-                return store;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Invalid pick. Try again");
-                return PickAStore(user);
-            }
+            return store;
+            
         }
     }
 }
