@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace PizzaPlanetConsole2.DataAccess.DataModels
 {
@@ -17,7 +19,6 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
         public virtual DbSet<FoodGroup> FoodGroup { get; set; }
         public virtual DbSet<Foods> Foods { get; set; }
         public virtual DbSet<Inventory> Inventory { get; set; }
-        public virtual DbSet<OrderLines> OrderLines { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Reply> Reply { get; set; }
         public virtual DbSet<Shoes> Shoes { get; set; }
@@ -114,28 +115,14 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
                     .HasConstraintName("FK__Inventory__Store__15DA3E5D");
             });
 
-            modelBuilder.Entity<OrderLines>(entity =>
-            {
-                entity.HasKey(e => e.OrderlineId)
-                    .HasName("PK__OrderLin__F8912DF267EC7FE5");
-
-                entity.HasOne(d => d.Food)
-                    .WithMany(p => p.OrderLines)
-                    .HasForeignKey(d => d.FoodId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__OrderLine__FoodI__1209AD79");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.OrderLines)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderLines_Orders");
-            });
-
             modelBuilder.Entity<Orders>(entity =>
             {
                 entity.HasKey(e => e.OrderId)
                     .HasName("PK__Orders__C3905BCF2D92117F");
+
+                entity.Property(e => e.FoodIds)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.OrderDate).HasColumnType("date");
 

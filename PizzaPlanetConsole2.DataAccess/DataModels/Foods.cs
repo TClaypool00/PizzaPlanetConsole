@@ -8,7 +8,6 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
         public Foods()
         {
             Inventory = new HashSet<Inventory>();
-            OrderLines = new HashSet<OrderLines>();
         }
 
         public int FoodId { get; set; }
@@ -19,6 +18,5 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
 
         public virtual FoodGroup FoodGroup { get; set; }
         public virtual ICollection<Inventory> Inventory { get; set; }
-        public virtual ICollection<OrderLines> OrderLines { get; set; }
     }
 }
