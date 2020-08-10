@@ -114,17 +114,17 @@ namespace PizzaPlanetConsole.App.Classes
                 else
                 {
                     Console.Write("Incorrect attempt. Would you like to  try agaiin? ");
-                    return IncorrectInfo();
+                    return RegisterOrLogin();
                 }
             }
             catch(Exception )
             {
                 Console.Write("Incorrect attempt. Would you like to  try agaiin? ");
-                return IncorrectInfo();
+                return RegisterOrLogin();
             }
         }
 
-        public static Users IncorrectInfo()
+        public static Users RegisterOrLogin()
         {
             
             string yesOrNo = Console.ReadLine();
