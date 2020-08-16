@@ -1,4 +1,4 @@
-﻿using PizzaPlanetConsole2.DataAccess.DataModels;
+﻿using PizzaPlanetConsole.DataAccess.DataModels;
 using System;
 using System.Collections.Generic;
 
@@ -20,30 +20,15 @@ namespace PizzaPlanetConsole.App.Classes
             Console.ReadLine();
         }
 
-        public static int DisplayList(List<Foods> list)
+        public static void Exit(int input)
         {
-            try
-            {
-                foreach (var item in list)
-                {
-                    Console.WriteLine($"{item.FoodId}. {item.FoodTitle} {item.FoodGroup.FoodGroups} {item.Price:C2}");
-                }
-
-                int input = GeneralClass.UserPicks();
-
-                return input;
-            }
-            catch (NullReferenceException)
-            {
-                Console.WriteLine("Not an option. Try again.");
-                GeneralClass.PressEnter();
-                return DisplayList(list);
-            }
+            if (input == 0)
+                Environment.Exit(0);
         }
 
-        public static string ListToString(List<int> list)
+        public static void WriteExit()
         {
-            return string.Join(" ", list);
+            Console.WriteLine("0. Exit");
         }
     }
 }
