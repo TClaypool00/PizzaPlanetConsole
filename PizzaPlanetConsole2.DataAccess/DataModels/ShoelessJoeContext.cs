@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace PizzaPlanetConsole2.DataAccess.DataModels
+namespace PizzaPlanetConsole.DataAccess.DataModels
 {
     public partial class ShoelessJoeContext : DbContext
     {
@@ -15,6 +15,7 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
         {
         }
 
+        public virtual DbSet<CartItem> CartItem { get; set; }
         public virtual DbSet<Comments> Comments { get; set; }
         public virtual DbSet<FoodGroup> FoodGroup { get; set; }
         public virtual DbSet<Foods> Foods { get; set; }
@@ -22,7 +23,8 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Reply> Reply { get; set; }
         public virtual DbSet<Shoes> Shoes { get; set; }
-        public virtual DbSet<Stores> Stores { get; set; }
+        public virtual DbSet<ShoppingCart> ShoppingCart { get; set; }
+        public virtual DbSet<Store> Store { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -35,6 +37,24 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CartItem>(entity =>
+            {
+                entity.HasKey(e => e.ItemId)
+                    .HasName("PK__CartItem__727E838B441DDCAD");
+
+                entity.HasOne(d => d.Cart)
+                    .WithMany(p => p.CartItem)
+                    .HasForeignKey(d => d.CartId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__CartItem__CartId__3AD6B8E2");
+
+                entity.HasOne(d => d.Food)
+                    .WithMany(p => p.CartItem)
+                    .HasForeignKey(d => d.FoodId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__CartItem__FoodId__3BCADD1B");
+            });
+
             modelBuilder.Entity<Comments>(entity =>
             {
                 entity.HasKey(e => e.CommentId)
@@ -97,48 +117,33 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
 
             modelBuilder.Entity<Inventory>(entity =>
             {
-                entity.Property(e => e.FoodTitle)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-
                 entity.HasOne(d => d.Food)
                     .WithMany(p => p.Inventory)
                     .HasForeignKey(d => d.FoodId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__FoodI__16CE6296");
+                    .HasConstraintName("FK__Inventory__FoodI__2D7CBDC4");
 
                 entity.HasOne(d => d.Store)
                     .WithMany(p => p.Inventory)
                     .HasForeignKey(d => d.StoreId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Inventory__Store__15DA3E5D");
+                    .HasConstraintName("FK__Inventory__Store__2C88998B");
             });
 
             modelBuilder.Entity<Orders>(entity =>
             {
                 entity.HasKey(e => e.OrderId)
-                    .HasName("PK__Orders__C3905BCF2D92117F");
+                    .HasName("PK__Orders__C3905BCF30569DAE");
 
-                entity.Property(e => e.FoodIds)
-                    .HasMaxLength(255)
-                    .IsUnicode(false);
+                entity.Property(e => e.TotaLprice)
+                    .HasColumnName("TotaLPrice")
+                    .HasColumnType("money");
 
-                entity.Property(e => e.OrderDate).HasColumnType("date");
-
-                entity.Property(e => e.OrderTotal).HasColumnType("money");
-
-                entity.HasOne(d => d.Customer)
+                entity.HasOne(d => d.Cart)
                     .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.CustomerId)
+                    .HasForeignKey(d => d.CartId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Orders__Customer__019E3B86");
-
-                entity.HasOne(d => d.Store)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.StoreId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__Orders__StoreId__00AA174D");
+                    .HasConstraintName("FK__Orders__CartId__408F9238");
             });
 
             modelBuilder.Entity<Reply>(entity =>
@@ -204,34 +209,47 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
                     .HasConstraintName("FK_Shoes_Users");
             });
 
-            modelBuilder.Entity<Stores>(entity =>
+            modelBuilder.Entity<ShoppingCart>(entity =>
             {
-                entity.HasKey(e => e.StoreId)
-                    .HasName("PK__Stores__3B82F101FDD6BF25");
+                entity.HasKey(e => e.CartId)
+                    .HasName("PK__Shopping__51BCD7B719BC83F1");
 
+                entity.Property(e => e.TimeStamp).HasColumnType("date");
+
+                entity.HasOne(d => d.Store)
+                    .WithMany(p => p.ShoppingCart)
+                    .HasForeignKey(d => d.StoreId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ShoppingC__Store__3DB3258D");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ShoppingCart)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__ShoppingC__UserI__37FA4C37");
+            });
+
+            modelBuilder.Entity<Store>(entity =>
+            {
                 entity.Property(e => e.City)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PhoneNumber)
+                entity.Property(e => e.Phone)
                     .IsRequired()
+                    .HasColumnName("PHone")
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
                 entity.Property(e => e.State)
                     .IsRequired()
-                    .HasMaxLength(30)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Street)
                     .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ZipCode)
-                    .IsRequired()
-                    .HasMaxLength(5)
+                    .HasMaxLength(50)
                     .IsUnicode(false);
             });
 
