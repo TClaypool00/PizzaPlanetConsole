@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaPlanetConsole.App", "PizzaPlanetConsole.App\PizzaPlanetConsole.App.csproj", "{A362F90F-DD50-4EBC-95BF-FB6FE93CA1CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzaPlanetConsole.App", "PizzaPlanetConsole.App\PizzaPlanetConsole.App.csproj", "{A362F90F-DD50-4EBC-95BF-FB6FE93CA1CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PizzaPlanetConsole2.DataAccess", "PizzaPlanetConsole2.DataAccess\PizzaPlanetConsole2.DataAccess.csproj", "{32FB05F8-D792-4F2A-BB40-C474B22B894E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PizzaPlanetConsole.DataAccess", "PizzaPlanetConsole2.DataAccess\PizzaPlanetConsole.DataAccess.csproj", "{32FB05F8-D792-4F2A-BB40-C474B22B894E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

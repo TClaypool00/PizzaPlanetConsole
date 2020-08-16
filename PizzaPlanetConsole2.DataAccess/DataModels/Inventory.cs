@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PizzaPlanetConsole2.DataAccess.DataModels
+namespace PizzaPlanetConsole.DataAccess.DataModels
 {
     public partial class Inventory
     {
         public int InventoryId { get; set; }
         public int StoreId { get; set; }
         public int FoodId { get; set; }
-        public int Quanity { get; set; }
-        public string FoodTitle { get; set; }
+        public int Quantity { get; set; }
 
         public virtual Foods Food { get; set; }
-        public virtual Stores Store { get; set; }
+        public virtual Store Store { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PizzaPlanetConsole2.DataAccess.DataModels
+namespace PizzaPlanetConsole.DataAccess.DataModels
 {
     public partial class FoodGroup
     {

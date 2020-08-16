@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PizzaPlanetConsole2.DataAccess.DataModels
+namespace PizzaPlanetConsole.DataAccess.DataModels
 {
     public partial class Users
     {
         public Users()
         {
             Comments = new HashSet<Comments>();
-            Orders = new HashSet<Orders>();
             Reply = new HashSet<Reply>();
             Shoes = new HashSet<Shoes>();
+            ShoppingCart = new HashSet<ShoppingCart>();
         }
 
         public int UserId { get; set; }
@@ -26,8 +26,8 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
         public string PhoneNumber { get; set; }
 
         public virtual ICollection<Comments> Comments { get; set; }
-        public virtual ICollection<Orders> Orders { get; set; }
         public virtual ICollection<Reply> Reply { get; set; }
         public virtual ICollection<Shoes> Shoes { get; set; }
+        public virtual ICollection<ShoppingCart> ShoppingCart { get; set; }
     }
 }

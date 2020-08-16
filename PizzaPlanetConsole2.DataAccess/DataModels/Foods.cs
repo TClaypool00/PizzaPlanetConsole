@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PizzaPlanetConsole2.DataAccess.DataModels
+namespace PizzaPlanetConsole.DataAccess.DataModels
 {
     public partial class Foods
     {
         public Foods()
         {
+            CartItem = new HashSet<CartItem>();
             Inventory = new HashSet<Inventory>();
         }
 
@@ -14,9 +15,9 @@ namespace PizzaPlanetConsole2.DataAccess.DataModels
         public int FoodGroupId { get; set; }
         public string FoodTitle { get; set; }
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
 
         public virtual FoodGroup FoodGroup { get; set; }
+        public virtual ICollection<CartItem> CartItem { get; set; }
         public virtual ICollection<Inventory> Inventory { get; set; }
     }
 }

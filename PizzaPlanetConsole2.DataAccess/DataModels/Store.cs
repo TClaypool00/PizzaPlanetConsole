@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PizzaPlanetConsole2.DataAccess.DataModels
+namespace PizzaPlanetConsole.DataAccess.DataModels
 {
-    public partial class Stores
+    public partial class Store
     {
-        public Stores()
+        public Store()
         {
             Inventory = new HashSet<Inventory>();
-            Orders = new HashSet<Orders>();
+            ShoppingCart = new HashSet<ShoppingCart>();
         }
 
         public int StoreId { get; set; }
-        public string PhoneNumber { get; set; }
         public string Street { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string ZipCode { get; set; }
+        public int ZipCode { get; set; }
+        public string Phone { get; set; }
 
         public virtual ICollection<Inventory> Inventory { get; set; }
-        public virtual ICollection<Orders> Orders { get; set; }
+        public virtual ICollection<ShoppingCart> ShoppingCart { get; set; }
     }
 }
