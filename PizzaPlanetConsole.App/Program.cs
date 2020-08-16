@@ -1,5 +1,5 @@
 ﻿using PizzaPlanetConsole.App.Classes;
-using PizzaPlanetConsole2.DataAccess.DataModels;
+using PizzaPlanetConsole.DataAccess.DataModels;
 using System;
 
 namespace PizzaPlanetConsole.App
