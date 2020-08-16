@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PizzaPlanetConsole2.DataAccess.DataModels;
+using PizzaPlanetConsole.DataAccess.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +10,12 @@ namespace PizzaPlanetConsole.App.Classes
     {
         private static readonly ShoelessJoeContext ctx = new ShoelessJoeContext();
 
-        public static List<int> OrderList { get; set; } = new List<int>();
-
-        public static List<decimal> PriceList { get; set; } = new List<decimal>();
-
-        public static void Order(Stores store, Users user)
+        public static void Order(Store store, Users user)
         {
             try
             {
+                var cart = ShoppingCartClass.AddCart(user, store);
+
                 while (true)
                 {
                     Console.WriteLine($"Welcome to Pizza Planet on {store.Street} in {store.City}, {store.State}");
@@ -25,49 +23,43 @@ namespace PizzaPlanetConsole.App.Classes
                     var groups = ctx.FoodGroup
                         .ToList();
 
-                    foreach (var item in groups)
-                    {
-                        Console.WriteLine($"{item.FoodGroupId}. {item.FoodGroups}");
-                    }
+                    Display.DisplayList(groups);
 
-                    Console.WriteLine("0. Exit");
+                    GeneralClass.WriteExit();
 
                     var foodList = UserPicksGroup();
-                    int order = GeneralClass.DisplayList(foodList);
-                    decimal price = GetPrice(order);
+                    int order = Display.DisplayList(foodList);
 
-                    PriceList.Add(price);
-                    OrderList.Add(order);
-                    Console.Write("Would like to add anotehr item? (y/n)");
-                    string contenue = Console.ReadLine();
+                    CartItemClass.AddItem(cart, order);
 
-                    if (contenue.ToLower() == "y")
-                        Order(store, user);
-                    else
-                    {
+                    Console.Write("Would like to add another item? (y/n)");
+                    string continued = Console.ReadLine();
+
+                    if (continued.ToLower() == "n")
                         break;
-                    }
                 }
 
-                decimal total = GetTotalPrice();
-                string items = GeneralClass.ListToString(OrderList);
-                OrderClass.AddToOrder(items, user, store, total);
-                Console.WriteLine("Your order has been placed!");
+                decimal total = OrderClass.CalcTotal(cart.CartId);
+
+                OrderClass.UserPays(total);
+                OrderClass.AddOrder(total, cart.CartId);
+                
+                GeneralClass.PressEnter();
                 Navigation.MainMenu(user);
 
             }
             catch (NullReferenceException)
             {
-                Console.WriteLine("Not a valid number.");
+                Console.Write("Not a valid number.");
                 GeneralClass.PressEnter();
-                Navigation.MainMenu(user);
+                Navigation.PlaceOrder(user);
             }
         }
 
         public static List<Foods> UserPicksGroup()
         {
             int input = GeneralClass.UserPicks();
-            Navigation.Exit(input);
+            GeneralClass.Exit(input);
 
             var foods = ctx.Foods
                 .Include(g => g.FoodGroup)
@@ -77,24 +69,43 @@ namespace PizzaPlanetConsole.App.Classes
             return foods;
         }
 
-        public static decimal GetPrice(int id)
+        public static void AddFood(Users user)
         {
-            var food = ctx.Foods
-                .FirstOrDefault(f => f.FoodId == id);
+            try
+            {
+                while (true)
+                {
+                    var newFood = new Foods();
 
-            return food.Price;
+                    Console.Write("Enter Food Group Id: ");
+                    newFood.FoodGroupId = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
+
+                    Console.Write("Enter Food title: ");
+                    newFood.FoodTitle = Console.ReadLine();
+                    Console.WriteLine();
+
+                    Console.Write("Enter price: ");
+                    newFood.Price = decimal.Parse(Console.ReadLine());
+
+                    ctx.Foods.Add(newFood);
+                    ctx.SaveChanges();
+                    Console.WriteLine("Food added!");
+
+                    Console.WriteLine("Add another food? (y/n)");
+                    string again = Console.ReadLine();
+
+                    if (again.ToLower() != "y")
+                        break;
+                }
+                Navigation.MainMenu(user);
+            }
+            catch (Exception)
+            {
+                Console.Write("Something went wrong.");
+                GeneralClass.PressEnter();
+                Navigation.PlaceOrder(user);
+            }
         }
-
-        public static decimal GetTotalPrice()
-        {
-            return PriceList.Sum(x => Convert.ToDecimal(x));
-        }
-
-        public static List<int> CoventStringToList(string orders)
-        {
-            return orders.Split(" ").Select(int.Parse).ToList();
-        }
-
-        
     }
 }
